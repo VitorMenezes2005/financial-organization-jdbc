@@ -1,9 +1,11 @@
 package model.dao.jdbc;
 
+import db.DB;
+import db.DbException;
 import model.dao.RecipesDao;
 import model.entities.Recipes;
 
-import java.sql.Connection;
+import java.sql.*;
 
 public class RecipesDaoJDBC implements RecipesDao {
 
@@ -11,10 +13,40 @@ public class RecipesDaoJDBC implements RecipesDao {
     public RecipesDaoJDBC(Connection conn){
         this.conn = conn;
     }
-    
+
     @Override
     public void insert(Recipes obj) {
+        PreparedStatement st = null;
 
+        try {
+            st = conn.prepareStatement(
+                    "INSERT INTO recipes "
+                            + "(Category, Date, Value) "
+                            + "VALUES "
+                            + "(?, ?, ?) ",
+                            Statement.RETURN_GENERATED_KEYS
+            );
+
+            st.setString(1, obj.getCategory());
+            st.setDate(2, new java.sql.Date(obj.getDate().getTime()));
+            st.setDouble(3, obj.getValue());
+
+            int arrowAffected = st.executeUpdate();
+
+            if(arrowAffected > 0){
+                ResultSet rs = st.getGeneratedKeys();
+                if(rs.next()){
+                    int id = rs.getInt(1);
+                    obj.setId(id);
+                }
+                DB.closeResultSet(rs);
+            }
+
+        }catch(SQLException e){
+            throw new DbException("An error occurred, no rows were affected!");
+        }finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
