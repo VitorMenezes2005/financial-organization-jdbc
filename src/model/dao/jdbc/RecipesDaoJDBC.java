@@ -75,7 +75,20 @@ public class RecipesDaoJDBC implements RecipesDao {
 
     @Override
     public void deletedByID(Integer id) {
+        PreparedStatement st = null;
 
+        try{
+            st = conn.prepareStatement("DELETE FROM recipes WHERE Id = ?");
+
+            st.setInt(1, id);
+
+            st.executeUpdate();
+            
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
