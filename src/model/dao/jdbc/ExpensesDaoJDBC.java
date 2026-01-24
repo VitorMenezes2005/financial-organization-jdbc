@@ -92,6 +92,30 @@ public class ExpensesDaoJDBC implements ExpensesDao {
 
     @Override
     public Expenses findByCategory(String category) {
-        return null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            st = conn.prepareStatement("SELECT * FROM expenses WHERE Category = ?");
+
+            st.setString(1, category);
+
+            rs = st.executeQuery();
+
+            if(rs.next()){
+                Expenses expenses = new Expenses();
+                expenses.setId(rs.getInt("Id"));
+                expenses.setCategory(rs.getString("Category"));
+                expenses.setDate(rs.getDate("Date"));
+                expenses.setValue(rs.getDouble("Value"));
+                return expenses;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }

@@ -83,7 +83,7 @@ public class RecipesDaoJDBC implements RecipesDao {
             st.setInt(1, id);
 
             st.executeUpdate();
-            
+
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         }finally {
@@ -93,6 +93,30 @@ public class RecipesDaoJDBC implements RecipesDao {
 
     @Override
     public Recipes findByCategory(String category) {
-        return null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            st = conn.prepareStatement("SELECT * FROM recipes WHERE Category = ?");
+
+            st.setString(1, category);
+
+            rs = st.executeQuery();
+
+            if (rs.next()){
+                Recipes recipes = new Recipes();
+                recipes.setId(rs.getInt("Id"));
+                recipes.setCategory(rs.getString("Category"));
+                recipes.setDate(rs.getDate("Date"));
+                recipes.setValue(rs.getDouble("Value"));
+                return recipes;
+            }
+            return null;
+        }catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }
