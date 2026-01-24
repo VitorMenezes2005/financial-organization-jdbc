@@ -9,5 +9,5 @@ import java.util.Date;
 void main() {
     RecipesDao recipesDao = DaoFactory.createRecipesDao();
     ExpensesDao expensesDao = DaoFactory.createExpensesDao();
-
+    
 }

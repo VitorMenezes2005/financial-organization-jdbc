@@ -50,7 +50,26 @@ public class ExpensesDaoJDBC implements ExpensesDao {
 
     @Override
     public void update(Expenses obj) {
+        PreparedStatement st = null;
 
+        try {
+            st = conn.prepareStatement(
+                    "UPDATE expenses "
+                            + "SET Category = ?, Date = ?, Value = ? "
+                            + "WHERE Id = ?");
+
+            st.setString(1, obj.getCategory());
+            st.setDate(2, new java.sql.Date(obj.getDate().getTime()));
+            st.setDouble(3, obj.getValue());
+            st.setInt(4, obj.getId());
+
+            st.executeUpdate();
+
+        }catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
