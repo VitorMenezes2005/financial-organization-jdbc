@@ -1,13 +1,17 @@
 import model.dao.DaoFactory;
-import model.dao.ExpensesDao;
-import model.dao.RecipesDao;
-import model.entities.Expenses;
-import model.entities.Recipes;
-
-import java.util.Date;
+import model.dao.TransactionsDao;
+import model.entities.Transactions;
 
 void main() {
-    RecipesDao recipesDao = DaoFactory.createRecipesDao();
-    ExpensesDao expensesDao = DaoFactory.createExpensesDao();
-    
+    TransactionsDao transactionsDao = DaoFactory.createRecipesDao();
+
+    Transactions obj = transactionsDao.findByCategory("Recipe");
+    IO.println("Profit received:");
+    IO.println(obj);
+
+    IO.println();
+
+    Transactions obj2 = transactionsDao.findByCategory("Expense");
+    IO.println("Deficit received:");
+    IO.println(obj2);
 }

@@ -2,34 +2,35 @@ package model.dao.jdbc;
 
 import db.DB;
 import db.DbException;
-import model.dao.RecipesDao;
-import model.entities.Recipes;
+import model.dao.TransactionsDao;
+import model.entities.Transactions;
 
 import java.sql.*;
 
-public class RecipesDaoJDBC implements RecipesDao {
+public class TransactionsDaoJDBC implements TransactionsDao {
 
     private Connection conn;
-    public RecipesDaoJDBC(Connection conn){
+    public TransactionsDaoJDBC(Connection conn){
         this.conn = conn;
     }
 
     @Override
-    public void insert(Recipes obj) {
+    public void insert(Transactions obj) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
-                    "INSERT INTO recipes "
-                            + "(Category, Date, Value) "
+                    "INSERT INTO transactions "
+                            + "(Category, Type, Date, Value) "
                             + "VALUES "
-                            + "(?, ?, ?) ",
+                            + "(?, ?, ?, ?) ",
                             Statement.RETURN_GENERATED_KEYS
             );
 
             st.setString(1, obj.getCategory());
-            st.setDate(2, new java.sql.Date(obj.getDate().getTime()));
-            st.setDouble(3, obj.getValue());
+            st.setString(2, obj.getType());
+            st.setDate(3, new java.sql.Date(obj.getDate().getTime()));
+            st.setDouble(4, obj.getValue());
 
             int arrowAffected = st.executeUpdate();
 
@@ -50,19 +51,20 @@ public class RecipesDaoJDBC implements RecipesDao {
     }
 
     @Override
-    public void update(Recipes obj) {
+    public void update(Transactions obj) {
         PreparedStatement st = null;
 
         try {
             st = conn.prepareStatement(
-                    "UPDATE recipes "
-                            + "SET Category = ?, Date = ?, Value = ? "
+                    "UPDATE transactions "
+                            + "SET Category = ?, Type = ?, Date = ?, Value = ? "
                             + "WHERE Id = ?");
 
             st.setString(1, obj.getCategory());
-            st.setDate(2, new java.sql.Date(obj.getDate().getTime()));
-            st.setDouble(3, obj.getValue());
-            st.setInt(4, obj.getId());
+            st.setString(2, obj.getType());
+            st.setDate(3, new java.sql.Date(obj.getDate().getTime()));
+            st.setDouble(4, obj.getValue());
+            st.setInt(5, obj.getId());
 
             st.executeUpdate();
 
@@ -78,7 +80,7 @@ public class RecipesDaoJDBC implements RecipesDao {
         PreparedStatement st = null;
 
         try{
-            st = conn.prepareStatement("DELETE FROM recipes WHERE Id = ?");
+            st = conn.prepareStatement("DELETE FROM transactions WHERE Id = ?");
 
             st.setInt(1, id);
 
@@ -92,24 +94,25 @@ public class RecipesDaoJDBC implements RecipesDao {
     }
 
     @Override
-    public Recipes findByCategory(String category) {
+    public Transactions findByCategory(String category) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
         try{
-            st = conn.prepareStatement("SELECT * FROM recipes WHERE Category = ?");
+            st = conn.prepareStatement("SELECT * FROM transactions WHERE Category = ?");
 
             st.setString(1, category);
 
             rs = st.executeQuery();
 
             if (rs.next()){
-                Recipes recipes = new Recipes();
-                recipes.setId(rs.getInt("Id"));
-                recipes.setCategory(rs.getString("Category"));
-                recipes.setDate(rs.getDate("Date"));
-                recipes.setValue(rs.getDouble("Value"));
-                return recipes;
+                Transactions transactions = new Transactions();
+                transactions.setId(rs.getInt("Id"));
+                transactions.setCategory(rs.getString("Category"));
+                transactions.setType(rs.getString("Type"));
+                transactions.setDate(rs.getDate("Date"));
+                transactions.setValue(rs.getDouble("Value"));
+                return transactions;
             }
             return null;
         }catch(SQLException e){

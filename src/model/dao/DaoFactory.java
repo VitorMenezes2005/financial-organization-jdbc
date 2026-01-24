@@ -1,15 +1,10 @@
 package model.dao;
 
 import db.DB;
-import model.dao.jdbc.ExpensesDaoJDBC;
-import model.dao.jdbc.RecipesDaoJDBC;
+import model.dao.jdbc.TransactionsDaoJDBC;
 
 public class DaoFactory {
-    public static RecipesDao createRecipesDao(){
-        return new RecipesDaoJDBC(DB.getConnection());
-    }
-
-    public static ExpensesDao createExpensesDao(){
-        return new ExpensesDaoJDBC(DB.getConnection());
+    public static TransactionsDao createRecipesDao(){
+        return new TransactionsDaoJDBC(DB.getConnection());
     }
 }

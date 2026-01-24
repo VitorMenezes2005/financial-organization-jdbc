@@ -3,18 +3,20 @@ package model.entities;
 import java.util.Date;
 import java.util.Objects;
 
-public class Recipes {
+public class Transactions {
     private Integer id;
     private String category;
+    private String type;
     private Date date;
     private Double value;
 
-    public Recipes(){
+    public Transactions(){
     }
 
-    public Recipes(Integer id, String category, Date date, Double value) {
+    public Transactions(Integer id, String category, String type, Date date, Double value) {
         this.id = id;
         this.category = category;
+        this.type = type;
         this.date = date;
         this.value = value;
     }
@@ -35,6 +37,14 @@ public class Recipes {
         this.category = category;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -53,20 +63,21 @@ public class Recipes {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Recipes recipes)) return false;
-        return Objects.equals(id, recipes.id) && Objects.equals(category, recipes.category) && Objects.equals(date, recipes.date) && Objects.equals(value, recipes.value);
+        if (!(o instanceof Transactions that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(category, that.category) && Objects.equals(type, that.type) && Objects.equals(date, that.date) && Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, category, date, value);
+        return Objects.hash(id, category, type, date, value);
     }
 
     @Override
     public String toString() {
-        return "Recipes{" +
+        return "Transactions{" +
                 "id=" + id +
                 ", category='" + category + '\'' +
+                ", type='" + type + '\'' +
                 ", date=" + date +
                 ", value=" + value +
                 '}';
