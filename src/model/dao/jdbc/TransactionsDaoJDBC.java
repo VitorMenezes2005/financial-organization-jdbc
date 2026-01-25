@@ -92,34 +92,4 @@ public class TransactionsDaoJDBC implements TransactionsDao {
             DB.closeStatement(st);
         }
     }
-
-    @Override
-    public Transactions findByCategory(String category) {
-        PreparedStatement st = null;
-        ResultSet rs = null;
-
-        try{
-            st = conn.prepareStatement("SELECT * FROM transactions WHERE Category = ?");
-
-            st.setString(1, category);
-
-            rs = st.executeQuery();
-
-            if (rs.next()){
-                Transactions transactions = new Transactions();
-                transactions.setId(rs.getInt("Id"));
-                transactions.setCategory(rs.getString("Category"));
-                transactions.setType(rs.getString("Type"));
-                transactions.setDate(rs.getDate("Date"));
-                transactions.setValue(rs.getDouble("Value"));
-                return transactions;
-            }
-            return null;
-        }catch(SQLException e){
-            throw new DbException(e.getMessage());
-        }finally {
-            DB.closeStatement(st);
-            DB.closeResultSet(rs);
-        }
-    }
 }
