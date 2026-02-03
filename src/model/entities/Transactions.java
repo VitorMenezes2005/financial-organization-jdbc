@@ -21,6 +21,21 @@ public class Transactions {
         this.value = value;
     }
 
+    public Transactions(Integer id, String category) {
+        this.id = id;
+        this.category = category;
+    }
+
+    public Transactions(Integer id, Date date) {
+        this.id = id;
+        this.date = date;
+    }
+
+    public Transactions(Integer id, Double value) {
+        this.id = id;
+        this.value = value;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -74,12 +89,10 @@ public class Transactions {
 
     @Override
     public String toString() {
-        return "Transactions{" +
-                "id=" + id +
-                ", category='" + category + '\'' +
-                ", type='" + type + '\'' +
-                ", date=" + date +
-                ", value=" + value +
-                '}';
+        return "* Id: " + id
+                + ", Category: " + category
+                + ", Type: " + type
+                + ", Date: " + date
+                + ", Value: " + value;
     }
 }

@@ -66,7 +66,13 @@ public class TransactionsDaoJDBC implements TransactionsDao {
             st.setDouble(4, obj.getValue());
             st.setInt(5, obj.getId());
 
-            st.executeUpdate();
+            int arrowsAffected = st.executeUpdate();
+
+            if(arrowsAffected > 0){
+                IO.println("Transaction updated!");
+            }else{
+                IO.println("Attention! Please provide an existing ID");
+            }
 
         }catch (SQLException e){
             throw new DbException(e.getMessage());
@@ -84,7 +90,13 @@ public class TransactionsDaoJDBC implements TransactionsDao {
 
             st.setInt(1, id);
 
-            st.executeUpdate();
+            int arrowsAffected = st.executeUpdate();
+
+            if(arrowsAffected > 0){
+                IO.println("Transaction deleted successfully!");
+            }else{
+                IO.println("This transaction does not exist");
+            }
 
         } catch (SQLException e) {
             throw new DbException(e.getMessage());

@@ -15,11 +15,9 @@ public class MonthlyReportDTO {
         return totalRevenue;
     }
 
-
     public Double getTotalExpenses() {
         return totalExpenses;
     }
-
 
     public Double getBalance() {
         return balance;

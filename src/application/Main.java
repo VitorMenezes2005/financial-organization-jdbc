@@ -1,27 +1,24 @@
+import db.DbException;
 import model.dao.DaoFactory;
 import model.dao.TransactionQueryDao;
 import model.dao.TransactionsDao;
 import model.entities.Transactions;
 import model.query.MonthlyReportDTO;
+import service.Menu;
+
+import java.sql.SQLException;
 
 void main() {
+    Scanner sc = new Scanner(System.in);
     TransactionsDao transactionsDao = DaoFactory.createTransactionsDao();
     TransactionQueryDao transactionQueryDao = DaoFactory.createReportQueryDao();
 
-    Transactions obj = transactionQueryDao.findByCategory("Recipe");
-    IO.println("Profit received:");
-    IO.println(obj);
+    try{
+        Menu menu = new Menu(sc, transactionsDao, transactionQueryDao);
+        menu.start();
+    }catch (ParseException e){
+        IO.println(e.getMessage());
+    }
 
-    IO.println();
-
-    Transactions obj2 = transactionQueryDao.findByCategory("Expense");
-    IO.println("Deficit received:");
-    IO.println(obj2);
-
-    IO.println();
-
-    MonthlyReportDTO obj3 = transactionQueryDao.generateReport(1, 2026);
-    IO.println(obj3.getTotalRevenue());
-    IO.println(obj3.getTotalExpenses());
-    IO.println(obj3.getBalance());
+    sc.close();
 }

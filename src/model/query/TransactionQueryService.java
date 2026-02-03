@@ -6,6 +6,8 @@ import model.dao.TransactionQueryDao;
 import model.entities.Transactions;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionQueryService implements TransactionQueryDao {
     private Connection conn;
@@ -56,7 +58,7 @@ public class TransactionQueryService implements TransactionQueryDao {
     }
 
     @Override
-    public Transactions findByCategory(String category) {
+    public List<Transactions> findByCategory(String category) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -67,16 +69,19 @@ public class TransactionQueryService implements TransactionQueryDao {
 
             rs = st.executeQuery();
 
-            if (rs.next()){
+            List<Transactions> transactionsList = new ArrayList<>();
+
+            while (rs.next()){
                 Transactions transactions = new Transactions();
                 transactions.setId(rs.getInt("Id"));
                 transactions.setCategory(rs.getString("Category"));
                 transactions.setType(rs.getString("Type"));
                 transactions.setDate(rs.getDate("Date"));
                 transactions.setValue(rs.getDouble("Value"));
-                return transactions;
+                transactionsList.add(transactions);
             }
-            return null;
+
+            return transactionsList;
         }catch(SQLException e){
             throw new DbException(e.getMessage());
         }finally {
